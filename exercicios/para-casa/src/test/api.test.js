@@ -3,10 +3,10 @@ const app = require("../app.js");
 
 let elementId;
 
-describe("API test", () => {
-  test("Rota Get /users/all", (done) => {
+describe("Teste API", () => {
+  test("Rota /tarefas", (done) => {
     request(app)
-      .get("/users/all")
+      .get("/tarefas")
       .expect(200)
       .expect((res) => {
         expect(res.body.lenght).not.toBe(0);
@@ -16,31 +16,33 @@ describe("API test", () => {
         return done();
       });
   });
-  test("Rota Post /users/create", (done) => {
+  test("Rota /novaTarefa", (done) => {
     request(app)
-      .post("/users/create")
+      .post("/novaTarefa")
       .expect("Content-Type", /json/)
       .send({
-        name: "Tereza",
-        email: "tereza@reprograma.com",
-        password: "javascript",
+        descricao: "Nova Colaboradora",
+        dataInclusao: "04/01/2022",
+        concluido: true,
+        nomeColaboradora: "Dafilyn",
+        password: "S3nh@S3gur@",
       })
       .expect(201)
       .end((err, res) => {
         if (err) return done(err);
-        elementId = res.body.savedUser._id;
+        elementId = res.body.descricao._id;
         return done();
       });
   });
 
-  test("Rota Delete /users/delete/:id", (done) => {
+  test("Rota /delete/:id", (done) => {
     request(app)
-      .delete(`/users/delete/${elementId}`)
+      .delete(`/delete/${elementId}`)
       .expect("Content-Type", /json/)
-      .expect(200)
+      .expect(400)
       .expect((res) => {
         console.log(res.body);
-        expect(res.body.userFound.email).toBe("tereza@reprograma.com");
+        expect(res.body.tarefas.descricao).toBe("");
       })
       .end((err, res) => {
         if (err) return done(err);
